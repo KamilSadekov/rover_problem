@@ -16,12 +16,19 @@ class Rover {
         this.direction = direction;
         this.plateau = plateau;
     }
-// possible facing directions list
+// possible facing directions list ex. if rover facing in N (north) and it will move (90deg) to left the final rover's position will be W (west)
     static DIRECTION = {
         'N': {'L': 'W', 'R': 'E'},
         'E': {'L': 'N', 'R': 'S'},
         'S': {'L': 'E', 'R': 'W'},
         'W': {'L': 'S', 'R': 'N'},
+    }
+    // possible MOVEMENTS by increasing / decreasing of coords depends on which way it's facing and calling M (moveForward)
+    static MOVEMENTS = {
+        'N': {x: 0, y: 1},
+        'E': {x: 1, y: 0},
+        'S': {x: 0, y: -1},
+        'W': {x: -1, y: 0},
     }
 
     turnLeft(){
@@ -31,22 +38,10 @@ class Rover {
         this.direction = Rover.DIRECTION[this.direction]['R'];
     }
     moveForward() {
-        let newX = this.x;
-        let newY = this.y;
-        switch (this.direction) {
-            case 'N':
-                newY += 1;
-                break;
-            case 'E':
-                newX += 1;
-                break;
-            case 'S':
-                newY -= 1;
-                break;
-            case 'W':
-                newX -= 1;
-                break;
-        }
+        const move = Rover.MOVEMENTS[this.direction];
+        const newX = this.x + move.x;
+        const newY = this.y + move.y;
+
         if (this.plateau.isWithinBorder(newX, newY)) {
             this.x = newX;
             this.y = newY;
@@ -121,7 +116,7 @@ function testMarsRover() {
                     MMRMMRMRRM
                     7 8 W
                     LMMLMMRMM`,
-            expectedOutput: `2 1 W\n6 8 N` // this is special mistaken case just for checking right working my tests solution ) real output will be: `0 1 S | 8 4 S`
+            expectedOutput: `2 1 W\n6 8 N` // this is special mistaken case just for checking right working my tests solution real output will be: `0 1 S | 8 4 S`
         }
     ];
 
